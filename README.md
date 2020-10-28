@@ -1,24 +1,15 @@
-# vue-ssr-todo
+# About
+这是慕课网上[Vue+Webpack打造todo应用](https://www.imooc.com/learn/935)课程的源码
 
-## Project setup
+# 使用方法
 ```
-yarn install
+git clone https://github.com/Jokcy/vue-todo-tech.git
 ```
-
-### Compiles and hot-reloads for development
+进入项目目录，运行
 ```
-yarn serve
+npm install
 ```
-
-### Compiles and minifies for production
+然后执行
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+npm run dev
+开始开发项目
