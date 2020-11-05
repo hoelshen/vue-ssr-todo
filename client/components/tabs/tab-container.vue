@@ -6,7 +6,7 @@ export default {
       required: true
     }
   },
-  render (h) {
+  render () {
     const contents = this.panes.map(pane => {
       return pane.active ? pane.$slots.default : null
     })

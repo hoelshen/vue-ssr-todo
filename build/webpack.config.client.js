@@ -2,11 +2,9 @@ const path = require('path')
 const HTMLPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-// const ExtractPlugin = require('extract-text-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const ExtractPlugin = require('extract-text-webpack-plugin')
 const baseConfig = require('./webpack.config.base')
 const VueClientPlugin = require('vue-server-renderer/client-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const cdnConfig = require('../app.config').cdn
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -20,8 +18,7 @@ const defaultPluins = [
   new HTMLPlugin({
     template: path.join(__dirname, 'template.html')
   }),
-  new VueClientPlugin(),
-  new VueLoaderPlugin()
+  new VueClientPlugin()
 ]
 
 const devServer = {
@@ -45,22 +42,14 @@ let config
 
 if (isDev) {
   config = merge(baseConfig, {
-    mode: 'development',
     devtool: '#cheap-module-eval-source-map',
     module: {
       rules: [
         {
-          test: /\.styl(us)?$/,
+          test: /\.styl/,
           use: [
             'vue-style-loader',
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                localIdentName: '[local]_[hash:base64:8]'
-              }
-            },
-            // 'css-loader',
+            'css-loader',
             {
               loader: 'postcss-loader',
               options: {
@@ -74,13 +63,12 @@ if (isDev) {
     },
     devServer,
     plugins: defaultPluins.concat([
-      new webpack.HotModuleReplacementPlugin()
-      // new webpack.NoEmitOnErrorsPlugin()
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoEmitOnErrorsPlugin()
     ])
   })
 } else {
   config = merge(baseConfig, {
-    mode: 'production',
     entry: {
       app: path.join(__dirname, '../client/client-entry.js'),
       vendor: ['vue']
@@ -92,39 +80,39 @@ if (isDev) {
     module: {
       rules: [
         {
-          test: /\.styl(us)?$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true
-              }
-            },
-            'stylus-loader'
-          ]
+          test: /\.styl/,
+          use: ExtractPlugin.extract({
+            fallback: 'vue-style-loader',
+            use: [
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              'stylus-loader'
+            ]
+          })
         }
       ]
     },
     plugins: defaultPluins.concat([
-      new MiniCssExtractPlugin({
-        filename: 'styles.[contentHash:8].css'
-      })
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name: 'vendor'
-      // }),
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name: 'runtime'
-      // }),
-      // new webpack.NamedChunksPlugin()
+      new ExtractPlugin('styles.[contentHash:8].css'),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor'
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'runtime'
+      }),
+      new webpack.NamedChunksPlugin()
     ])
   })
 }
 
 config.resolve = {
   alias: {
-    model: path.join(__dirname, '../client/model/client-model.js')
+    'model': path.join(__dirname, '../client/model/client-model.js')
   }
 }
 

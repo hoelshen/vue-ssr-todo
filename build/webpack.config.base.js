@@ -21,12 +21,11 @@ const config = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
-        // options: createVueLoaderOptions(isDev)
+        loader: 'vue-loader',
+        options: createVueLoaderOptions(isDev)
       },
       {
         test: /\.jsx$/,
-        // https://github.com/webpack/webpack/issues/8656
         loader: 'babel-loader'
       },
       {

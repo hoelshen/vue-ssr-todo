@@ -24,7 +24,7 @@ export default {
       this.$parent.onChange(this.index)
     }
   },
-  render (h) {
+  render () {
     const tab = this.$slots.label || <span>{this.label}</span>
     const classNames = {
       tab: true,

@@ -21,18 +21,12 @@ const devServer = {
   overlay: {
     errors: true
   },
-  historyApiFallback: {
-    index: '/public/index.html'
-  },
   hot: true
 }
 
 let config
 
 config = merge(baseConfig, {
-  output: {
-    publicPath: '/public/'
-  },
   entry: path.join(__dirname, '../practice/index.js'),
   devtool: '#cheap-module-eval-source-map',
   module: {
@@ -57,7 +51,7 @@ config = merge(baseConfig, {
   // import Vue from 'vue'
   resolve: {
     alias: {
-      vue: path.join(__dirname, '../node_modules/vue/dist/vue.esm.js')
+      'vue': path.join(__dirname, '../node_modules/vue/dist/vue.esm.js')
     }
   },
   plugins: defaultPluins.concat([
